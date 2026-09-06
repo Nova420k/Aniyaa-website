@@ -2,7 +2,7 @@
 
 Product site for **Aniyaa** — an unofficial Android client for [nyaa.si](https://nyaa.si).
 
-**Live:** [https://aniyaa.tide-cuticle.workers.dev](https://aniyaa.tide-cuticle.workers.dev)
+**Live:** [https://aniyaa.pages.dev](https://aniyaa.pages.dev)
 
 ## What this repo is
 
@@ -25,8 +25,8 @@ Then open `http://127.0.0.1:4173`.
 
 ## Deploy
 
-The public site is a Cloudflare Worker with static assets (`wrangler.jsonc`), not GitHub Pages.
+The public site is Cloudflare Pages (`aniyaa.pages.dev`).
 
 ```bash
-npx wrangler deploy
+npx wrangler pages deploy ./site --project-name=aniyaa --commit-dirty=true
 ```

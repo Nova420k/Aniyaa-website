@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aniyaa.tide-cuticle.workers.dev/sitemap.txt
+Sitemap: https://aniyaa.pages.dev/sitemap.txt
