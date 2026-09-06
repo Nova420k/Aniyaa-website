@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#6750A4">
   <meta property="og:title" content="Aniyaa">
   <meta property="og:description" content="Search nyaa.si from your Android phone. Not a torrent client — just a faster catalog.">
-  <meta property="og:image" content="images/logo.png">
+  <meta property="og:image" content="https://aniyaa.pages.dev/images/logo.png">
   <meta property="og:type" content="website">
   <link rel="canonical" href="https://aniyaa.pages.dev/">
   <link rel="icon" type="image/png" href="favicon.png">
@@ -30,7 +30,7 @@
         <a href="#features">Features</a>
         <a href="/faq">FAQ</a>
         <a href="/changelog">What's new</a>
-        <a href="/download">Download</a>
+        <a class="btn-nav" href="/download">Download</a>
       </nav>
       <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
         <span class="material-symbols-rounded icon-sun">light_mode</span>
@@ -61,7 +61,7 @@
             <span class="material-symbols-rounded">android</span>
             Android 7.0 and newer
           </p>
-          <h1>Nyaa in your pocket, <span class="gradient-text">without the browser.</span></h1>
+          <h1>Nyaa in your pocket,<br> <span class="gradient-text">without the browser.</span></h1>
           <p class="lede">
             Aniyaa is a small Android app for searching <a href="https://nyaa.si" target="_blank" rel="noopener">nyaa.si</a>.
             Filter results, keep bookmarks, and send a magnet to the torrent app you already use.
@@ -87,46 +87,71 @@
         <div class="hero-art" data-reveal>
           <div class="orb orb-a"></div>
           <div class="orb orb-b"></div>
-          <img class="mascot" src="images/logo.png" alt="Aniyaa mascot">
-          <div class="device" aria-hidden="true">
-            <div class="device-screen">
-              <div class="device-status"><span>Aniyaa</span><span>Search</span></div>
-              <div class="device-search">
-                <span class="material-symbols-rounded">search</span>
-                Search torrents…
+          <div class="hero-stage">
+            <img class="mascot" src="images/logo.png" alt="Aniyaa mascot">
+            <div class="device" aria-hidden="true">
+              <div class="device-screen">
+                <div class="device-notch"></div>
+                <div class="device-status"><span>9:41</span><span>Aniyaa</span></div>
+                <div class="device-search">
+                  <span class="material-symbols-rounded">search</span>
+                  Search torrents…
+                </div>
+                <div class="chips">
+                  <span class="chip on">Anime</span>
+                  <span class="chip">Audio</span>
+                  <span class="chip">Trusted</span>
+                </div>
+                <div class="listing">
+                  <strong>Winter catalog sample · 1080p</strong>
+                  <small>Anime · 1.4 GB · <span class="seed">▲ 842</span></small>
+                </div>
+                <div class="listing">
+                  <strong>Soundtrack collection</strong>
+                  <small>Audio · 320 MB · <span class="seed">▲ 210</span></small>
+                </div>
+                <div class="listing">
+                  <strong>Batch 01–12</strong>
+                  <small>Anime · 8.1 GB · <span class="seed">▲ 96</span></small>
+                </div>
+                <div class="device-bar">
+                  <div class="active"><span class="material-symbols-rounded">search</span>Search</div>
+                  <div><span class="material-symbols-rounded">history</span>History</div>
+                  <div><span class="material-symbols-rounded">bookmark</span>Saved</div>
+                  <div><span class="material-symbols-rounded">settings</span>Settings</div>
+                </div>
               </div>
-              <div class="chips">
-                <span class="chip on">Anime</span>
-                <span class="chip">Audio</span>
-                <span class="chip">Trusted</span>
-              </div>
-              <div class="listing">
-                <strong>Winter catalog sample · 1080p</strong>
-                <small>Anime · 1.4 GB · <span class="seed">▲ 842</span></small>
-              </div>
-              <div class="listing">
-                <strong>Soundtrack collection</strong>
-                <small>Audio · 320 MB · <span class="seed">▲ 210</span></small>
-              </div>
-              <div class="listing">
-                <strong>Batch 01–12</strong>
-                <small>Anime · 8.1 GB · <span class="seed">▲ 96</span></small>
-              </div>
-              <div class="device-bar">
-                <div class="active">Search</div>
-                <div>History</div>
-                <div>Saved</div>
-                <div>Settings</div>
-              </div>
+              <div class="device-home"></div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
+    <section class="stats" aria-label="At a glance">
+      <div class="wrap stats-row">
+        <div class="stat">
+          <strong data-release-tag>v2.2.0</strong>
+          <span>Latest GitHub APK</span>
+        </div>
+        <div class="stat">
+          <strong>7.0+</strong>
+          <span>Android, sideload</span>
+        </div>
+        <div class="stat">
+          <strong data-release-size>~3 MB</strong>
+          <span>No extra runtime</span>
+        </div>
+        <div class="stat">
+          <strong>Local</strong>
+          <span>No account, no sync</span>
+        </div>
+      </div>
+    </section>
+
     <section class="section section-muted" id="features">
       <div class="wrap">
-        <div class="section-head" data-reveal>
+        <div class="section-head">
           <h2>Built around the catalog, not the download</h2>
           <p>Aniyaa finds listings. Your torrent app does the rest.</p>
         </div>
@@ -273,35 +298,37 @@
           <h2>Questions people ask first</h2>
           <p>Short answers. The full list lives on the FAQ page.</p>
         </div>
-        <div class="faq-list">
-          <div class="faq-item" data-faq-item>
-            <button type="button" data-faq-button aria-expanded="false">
-              <span class="faq-num">1</span>
-              Does Aniyaa download torrents?
-              <span class="material-symbols-rounded">expand_more</span>
-            </button>
-            <div class="faq-panel" data-faq-panel>
-              <div>No. It opens a magnet or saves a .torrent file. A separate torrent app does the downloading.</div>
+        <div class="faq-shell">
+          <div class="faq-list">
+            <div class="faq-item" data-faq-item>
+              <button type="button" data-faq-button aria-expanded="false">
+                <span class="faq-num">1</span>
+                Does Aniyaa download torrents?
+                <span class="material-symbols-rounded">expand_more</span>
+              </button>
+              <div class="faq-panel" data-faq-panel>
+                <div>No. It opens a magnet or saves a .torrent file. A separate torrent app does the downloading.</div>
+              </div>
             </div>
-          </div>
-          <div class="faq-item" data-faq-item>
-            <button type="button" data-faq-button aria-expanded="false">
-              <span class="faq-num">2</span>
-              How do I install it?
-              <span class="material-symbols-rounded">expand_more</span>
-            </button>
-            <div class="faq-panel" data-faq-panel>
-              <div>Grab the APK from the latest GitHub release, open the file, and allow install from that source if Android asks. Details are on the <a href="/download">download page</a>.</div>
+            <div class="faq-item" data-faq-item>
+              <button type="button" data-faq-button aria-expanded="false">
+                <span class="faq-num">2</span>
+                How do I install it?
+                <span class="material-symbols-rounded">expand_more</span>
+              </button>
+              <div class="faq-panel" data-faq-panel>
+                <div>Grab the APK from the latest GitHub release, open the file, and allow install from that source if Android asks. Details are on the <a href="/download">download page</a>.</div>
+              </div>
             </div>
-          </div>
-          <div class="faq-item" data-faq-item>
-            <button type="button" data-faq-button aria-expanded="false">
-              <span class="faq-num">3</span>
-              nyaa.si is blocked. Can I still use it?
-              <span class="material-symbols-rounded">expand_more</span>
-            </button>
-            <div class="faq-panel" data-faq-panel>
-              <div>Yes. Set a mirror URL for that catalog in Settings. Bookmarks and history stay on the phone either way.</div>
+            <div class="faq-item" data-faq-item>
+              <button type="button" data-faq-button aria-expanded="false">
+                <span class="faq-num">3</span>
+                nyaa.si is blocked. Can I still use it?
+                <span class="material-symbols-rounded">expand_more</span>
+              </button>
+              <div class="faq-panel" data-faq-panel>
+                <div>Yes. Set a mirror URL for that catalog in Settings. Bookmarks and history stay on the phone either way.</div>
+              </div>
             </div>
           </div>
         </div>
@@ -339,6 +366,24 @@
         </div>
       </div>
     </section>
+
+    <section class="cta-band">
+      <div class="wrap">
+        <div class="cta-inner" data-reveal>
+          <div>
+            <h2>Install it, then search.</h2>
+            <p>Sideload the APK from GitHub. About 3 MB. No store listing.</p>
+          </div>
+          <div class="hero-actions">
+            <a class="btn btn-primary" data-release-href href="https://github.com/Gourab0002/Aniyaa/releases/latest">
+              <span class="material-symbols-rounded">download</span>
+              Download APK
+            </a>
+            <a class="btn btn-ghost" href="/download">Install steps</a>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="footer">
@@ -372,7 +417,7 @@
       </div>
     </div>
     <div class="wrap footer-bottom">
-      Â© <span data-year>2026</span> Aniyaa. Open source under AGPL-3.0.
+      © <span data-year>2026</span> Aniyaa. Open source under AGPL-3.0.
     </div>
   </footer>
 

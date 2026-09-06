@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FAQ — Aniyaa</title>
   <meta name="description" content="Answers for installing Aniyaa, sideloading the APK, mirrors, Sukebei, privacy, and moving from Sukiniyaa.">
+  <meta name="theme-color" content="#6750A4">
   <link rel="canonical" href="https://aniyaa.pages.dev/faq">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -23,7 +24,7 @@
         <a href="/#features">Features</a>
         <a class="is-current" href="/faq">FAQ</a>
         <a href="/changelog">What's new</a>
-        <a href="/download">Download</a>
+        <a class="btn-nav" href="/download">Download</a>
       </nav>
       <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
         <span class="material-symbols-rounded icon-sun">light_mode</span>
@@ -38,7 +39,7 @@
     <div class="drawer-scrim" data-drawer-scrim></div>
     <nav class="drawer-panel" aria-label="Mobile">
       <a href="/#features">Features</a>
-      <a href="/faq">FAQ</a>
+      <a class="is-current" href="/faq">FAQ</a>
       <a href="/changelog">What's new</a>
       <a href="/download">Download</a>
     </nav>
@@ -47,6 +48,7 @@
   <main id="main" class="section">
     <div class="wrap">
       <header class="page-hero section-head">
+        <p class="kicker"><span class="material-symbols-rounded">help</span> Help</p>
         <h1>FAQ &amp; troubleshooting</h1>
         <p>Install questions, mirrors, adult catalog, backups, and what Aniyaa will never do.</p>
         <div class="search-wrap">
@@ -58,113 +60,115 @@
         </div>
       </header>
 
-      <div class="faq-list">
-        <div class="faq-item" data-faq-item>
-          <button type="button" data-faq-button aria-expanded="false">
-            <span class="faq-num">1</span> What is Aniyaa?
-            <span class="material-symbols-rounded">expand_more</span>
-          </button>
-          <div class="faq-panel" data-faq-panel>
-            <div>An Android app for browsing nyaa.si without a web browser. You can search, filter, bookmark, and send a download to a torrent app you already have.</div>
+      <div class="faq-shell">
+        <div class="faq-list">
+          <div class="faq-item" data-faq-item>
+            <button type="button" data-faq-button aria-expanded="false">
+              <span class="faq-num">1</span> What is Aniyaa?
+              <span class="material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="faq-panel" data-faq-panel>
+              <div>An Android app for browsing nyaa.si without a web browser. You can search, filter, bookmark, and send a download to a torrent app you already have.</div>
+            </div>
           </div>
-        </div>
-        <div class="faq-item" data-faq-item>
-          <button type="button" data-faq-button aria-expanded="false">
-            <span class="faq-num">2</span> Is this official?
-            <span class="material-symbols-rounded">expand_more</span>
-          </button>
-          <div class="faq-panel" data-faq-panel>
-            <div>No. Aniyaa is unofficial and is not affiliated with or endorsed by nyaa.si or sukebei.nyaa.si.</div>
+          <div class="faq-item" data-faq-item>
+            <button type="button" data-faq-button aria-expanded="false">
+              <span class="faq-num">2</span> Is this official?
+              <span class="material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="faq-panel" data-faq-panel>
+              <div>No. Aniyaa is unofficial and is not affiliated with or endorsed by nyaa.si or sukebei.nyaa.si.</div>
+            </div>
           </div>
-        </div>
-        <div class="faq-item" data-faq-item>
-          <button type="button" data-faq-button aria-expanded="false">
-            <span class="faq-num">3</span> Does Aniyaa download torrents?
-            <span class="material-symbols-rounded">expand_more</span>
-          </button>
-          <div class="faq-panel" data-faq-panel>
-            <div>No. It finds listings. A torrent app such as LibreTorrent, Flud, or qBittorrent handles the actual download after you tap magnet or save the .torrent file.</div>
+          <div class="faq-item" data-faq-item>
+            <button type="button" data-faq-button aria-expanded="false">
+              <span class="faq-num">3</span> Does Aniyaa download torrents?
+              <span class="material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="faq-panel" data-faq-panel>
+              <div>No. It finds listings. A torrent app such as LibreTorrent, Flud, or qBittorrent handles the actual download after you tap magnet or save the .torrent file.</div>
+            </div>
           </div>
-        </div>
-        <div class="faq-item" data-faq-item>
-          <button type="button" data-faq-button aria-expanded="false">
-            <span class="faq-num">4</span> What Android version do I need?
-            <span class="material-symbols-rounded">expand_more</span>
-          </button>
-          <div class="faq-panel" data-faq-panel>
-            <div>Android 7.0 (API 24) or newer, plus an internet connection. Material You wallpaper colors need Android 12+.</div>
+          <div class="faq-item" data-faq-item>
+            <button type="button" data-faq-button aria-expanded="false">
+              <span class="faq-num">4</span> What Android version do I need?
+              <span class="material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="faq-panel" data-faq-panel>
+              <div>Android 7.0 (API 24) or newer, plus an internet connection. Material You wallpaper colors need Android 12+.</div>
+            </div>
           </div>
-        </div>
-        <div class="faq-item" data-faq-item>
-          <button type="button" data-faq-button aria-expanded="false">
-            <span class="faq-num">5</span> Android blocked the install
-            <span class="material-symbols-rounded">expand_more</span>
-          </button>
-          <div class="faq-panel" data-faq-panel>
-            <div>Aniyaa is not on Play Store, so Android will warn that the app is from an unknown source. Open the downloaded APK, choose Install anyway, and allow your browser or Files app to install packages if a switch appears.</div>
+          <div class="faq-item" data-faq-item>
+            <button type="button" data-faq-button aria-expanded="false">
+              <span class="faq-num">5</span> Android blocked the install
+              <span class="material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="faq-panel" data-faq-panel>
+              <div>Aniyaa is not on Play Store, so Android will warn that the app is from an unknown source. Open the downloaded APK, choose Install anyway, and allow your browser or Files app to install packages if a switch appears.</div>
+            </div>
           </div>
-        </div>
-        <div class="faq-item" data-faq-item>
-          <button type="button" data-faq-button aria-expanded="false">
-            <span class="faq-num">6</span> Will an update wipe my bookmarks?
-            <span class="material-symbols-rounded">expand_more</span>
-          </button>
-          <div class="faq-panel" data-faq-panel>
-            <div>No. Install a newer APK over the old one. Bookmarks, history, and saved searches stay on the device.</div>
+          <div class="faq-item" data-faq-item>
+            <button type="button" data-faq-button aria-expanded="false">
+              <span class="faq-num">6</span> Will an update wipe my bookmarks?
+              <span class="material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="faq-panel" data-faq-panel>
+              <div>No. Install a newer APK over the old one. Bookmarks, history, and saved searches stay on the device.</div>
+            </div>
           </div>
-        </div>
-        <div class="faq-item" data-faq-item>
-          <button type="button" data-faq-button aria-expanded="false">
-            <span class="faq-num">7</span> I used Sukiniyaa before
-            <span class="material-symbols-rounded">expand_more</span>
-          </button>
-          <div class="faq-panel" data-faq-panel>
-            <div>Install Aniyaa separately. The two apps use different package names, so one cannot update the other. Export a backup from Sukiniyaa and import it in Aniyaa Settings if you want to keep saved data.</div>
+          <div class="faq-item" data-faq-item>
+            <button type="button" data-faq-button aria-expanded="false">
+              <span class="faq-num">7</span> I used Sukiniyaa before
+              <span class="material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="faq-panel" data-faq-panel>
+              <div>Install Aniyaa separately. The two apps use different package names, so one cannot update the other. Export a backup from Sukiniyaa and import it in Aniyaa Settings if you want to keep saved data.</div>
+            </div>
           </div>
-        </div>
-        <div class="faq-item" data-faq-item>
-          <button type="button" data-faq-button aria-expanded="false">
-            <span class="faq-num">8</span> How do I enable Sukebei?
-            <span class="material-symbols-rounded">expand_more</span>
-          </button>
-          <div class="faq-panel" data-faq-panel>
-            <div>It is off by default. In Settings, turn on Enable Sukebei (18+) if you are 18 or older. Nyaa / Sukebei chips then appear on Search.</div>
+          <div class="faq-item" data-faq-item>
+            <button type="button" data-faq-button aria-expanded="false">
+              <span class="faq-num">8</span> How do I enable Sukebei?
+              <span class="material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="faq-panel" data-faq-panel>
+              <div>It is off by default. In Settings, turn on Enable Sukebei (18+) if you are 18 or older. Nyaa / Sukebei chips then appear on Search.</div>
+            </div>
           </div>
-        </div>
-        <div class="faq-item" data-faq-item>
-          <button type="button" data-faq-button aria-expanded="false">
-            <span class="faq-num">9</span> nyaa.si will not load
-            <span class="material-symbols-rounded">expand_more</span>
-          </button>
-          <div class="faq-panel" data-faq-panel>
-            <div>If the catalog is blocked on your network, set a mirror URL for that catalog in Settings. Aniyaa still only talks to the catalog you configure.</div>
+          <div class="faq-item" data-faq-item>
+            <button type="button" data-faq-button aria-expanded="false">
+              <span class="faq-num">9</span> nyaa.si will not load
+              <span class="material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="faq-panel" data-faq-panel>
+              <div>If the catalog is blocked on your network, set a mirror URL for that catalog in Settings. Aniyaa still only talks to the catalog you configure.</div>
+            </div>
           </div>
-        </div>
-        <div class="faq-item" data-faq-item>
-          <button type="button" data-faq-button aria-expanded="false">
-            <span class="faq-num">10</span> Where is my data stored?
-            <span class="material-symbols-rounded">expand_more</span>
-          </button>
-          <div class="faq-panel" data-faq-panel>
-            <div>On the phone. There is no Aniyaa account. Export or reset local data from Settings. See the <a href="/privacy">privacy page</a>.</div>
+          <div class="faq-item" data-faq-item>
+            <button type="button" data-faq-button aria-expanded="false">
+              <span class="faq-num">10</span> Where is my data stored?
+              <span class="material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="faq-panel" data-faq-panel>
+              <div>On the phone. There is no Aniyaa account. Export or reset local data from Settings. See the <a href="/privacy">privacy page</a>.</div>
+            </div>
           </div>
-        </div>
-        <div class="faq-item" data-faq-item>
-          <button type="button" data-faq-button aria-expanded="false">
-            <span class="faq-num">11</span> Can I pick my torrent app?
-            <span class="material-symbols-rounded">expand_more</span>
-          </button>
-          <div class="faq-panel" data-faq-panel>
-            <div>Yes. Settings has a preferred torrent app. First launch also walks through that choice during onboarding.</div>
+          <div class="faq-item" data-faq-item>
+            <button type="button" data-faq-button aria-expanded="false">
+              <span class="faq-num">11</span> Can I pick my torrent app?
+              <span class="material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="faq-panel" data-faq-panel>
+              <div>Yes. Settings has a preferred torrent app. First launch also walks through that choice during onboarding.</div>
+            </div>
           </div>
-        </div>
-        <div class="faq-item" data-faq-item>
-          <button type="button" data-faq-button aria-expanded="false">
-            <span class="faq-num">12</span> How do I build from source?
-            <span class="material-symbols-rounded">expand_more</span>
-          </button>
-          <div class="faq-panel" data-faq-panel>
-            <div>You need JDK 17 and the Android SDK. Clone the repo and run <code>./gradlew assembleDebug</code>. Signed releases publish when a <code>v*.*.*</code> tag is pushed.</div>
+          <div class="faq-item" data-faq-item>
+            <button type="button" data-faq-button aria-expanded="false">
+              <span class="faq-num">12</span> How do I build from source?
+              <span class="material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="faq-panel" data-faq-panel>
+              <div>You need JDK 17 and the Android SDK. Clone the repo and run <code>./gradlew assembleDebug</code>. Signed releases publish when a <code>v*.*.*</code> tag is pushed.</div>
+            </div>
           </div>
         </div>
       </div>
@@ -203,7 +207,7 @@
         </div>
       </div>
     </div>
-    <div class="wrap footer-bottom">Â© <span data-year>2026</span> Aniyaa.</div>
+    <div class="wrap footer-bottom">© <span data-year>2026</span> Aniyaa.</div>
   </footer>
   <button class="scroll-top" type="button" data-scroll-top aria-label="Back to top">
     <span class="material-symbols-rounded">arrow_upward</span>

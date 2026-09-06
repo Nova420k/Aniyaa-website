@@ -158,6 +158,16 @@
     }
   }
 
+  function initNavScroll() {
+    const nav = qs(".nav");
+    if (!nav) return;
+    function sync() {
+      nav.classList.toggle("is-scrolled", window.scrollY > 8);
+    }
+    window.addEventListener("scroll", sync, { passive: true });
+    sync();
+  }
+
   function initScrollTop() {
     const btn = qs("[data-scroll-top]");
     if (!btn) return;
@@ -178,6 +188,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     initThemeToggle();
     initDrawer();
+    initNavScroll();
     initSmoothScroll();
     initReveal();
     initFeatureTabs();

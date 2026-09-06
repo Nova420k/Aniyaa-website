@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Download — Aniyaa</title>
   <meta name="description" content="Download the latest Aniyaa APK from GitHub. Android 7.0 or newer. Sideload instructions included.">
+  <meta name="theme-color" content="#6750A4">
   <link rel="canonical" href="https://aniyaa.pages.dev/download">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -23,7 +24,7 @@
         <a href="/#features">Features</a>
         <a href="/faq">FAQ</a>
         <a href="/changelog">What's new</a>
-        <a class="is-current" href="/download">Download</a>
+        <a class="btn-nav is-current" href="/download">Download</a>
       </nav>
       <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
         <span class="material-symbols-rounded icon-sun">light_mode</span>
@@ -40,13 +41,14 @@
       <a href="/">Home</a>
       <a href="/faq">FAQ</a>
       <a href="/changelog">What's new</a>
-      <a href="/download">Download</a>
+      <a class="is-current" href="/download">Download</a>
     </nav>
   </div>
 
   <main id="main" class="section">
     <div class="wrap">
       <header class="page-hero section-head">
+        <p class="kicker"><span class="material-symbols-rounded">install_mobile</span> Sideload</p>
         <h1>Download Aniyaa</h1>
         <p>Latest APK from GitHub Releases. No store listing, no extra installer.</p>
       </header>
@@ -55,9 +57,9 @@
         <div>
           <article class="card">
             <p class="kicker"><span class="material-symbols-rounded">apk_install</span> GitHub release</p>
-            <h2 style="margin:0.6rem 0 0.3rem">Aniyaa <span data-release-tag>v2.2.0</span></h2>
+            <h2 style="margin:0.7rem 0 0.35rem">Aniyaa <span data-release-tag>v2.2.0</span></h2>
             <p class="muted">Published <span data-release-date>—</span> · <span data-release-size>APK</span> · package <code>com.nyaa.aniyaa</code></p>
-            <div class="hero-actions" style="margin-top:1rem">
+            <div class="hero-actions" style="margin-top:1.05rem;margin-bottom:0">
               <a class="btn btn-primary" data-release-href href="https://github.com/Gourab0002/Aniyaa/releases/latest">
                 <span class="material-symbols-rounded">download</span>
                 Download APK
@@ -70,21 +72,46 @@
 
           <article class="card" style="margin-top:1rem">
             <h3>Install on the phone</h3>
-            <ol class="install-ol">
-              <li>Open this page on the phone, or scan the QR code.</li>
-              <li>Tap the APK. If Android warns it is not from Play Store, choose Install anyway.</li>
-              <li>You may need to allow the browser or Files app to install unknown apps. Android shows a switch for that.</li>
-              <li>Open Aniyaa from the app drawer. Pick a torrent app if you want magnets to land somewhere specific.</li>
+            <ol class="install-grid">
+              <li>
+                <span class="install-n">1</span>
+                <div>
+                  <h3>Open this page on the phone</h3>
+                  <p>Or scan the QR code. The link always points at the latest APK.</p>
+                </div>
+              </li>
+              <li>
+                <span class="install-n">2</span>
+                <div>
+                  <h3>Tap the APK</h3>
+                  <p>If Android warns it is not from Play Store, choose Install anyway.</p>
+                </div>
+              </li>
+              <li>
+                <span class="install-n">3</span>
+                <div>
+                  <h3>Allow unknown apps</h3>
+                  <p>You may need to let the browser or Files app install packages. Android shows a switch for that.</p>
+                </div>
+              </li>
+              <li>
+                <span class="install-n">4</span>
+                <div>
+                  <h3>Open Aniyaa</h3>
+                  <p>Pick a torrent app if you want magnets to land somewhere specific.</p>
+                </div>
+              </li>
             </ol>
             <p class="note">To update later, install a newer APK over the old one. Bookmarks are kept.</p>
           </article>
         </div>
 
         <aside class="qr-card">
-          <h3>Scan on your phone</h3>
+          <p class="kicker"><span class="material-symbols-rounded">qr_code_2</span> Phone</p>
+          <h3>Scan to download</h3>
           <p class="muted">Points at the latest APK download URL.</p>
           <img data-release-qr src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=https%3A%2F%2Fgithub.com%2FGourab0002%2FAniyaa%2Freleases%2Flatest" alt="QR code for the latest Aniyaa APK" width="200" height="200">
-          <p class="muted">Android 7.0 or newer · ~3 MB</p>
+          <p class="muted"><span class="material-symbols-rounded">smartphone</span> Android 7.0 or newer · ~3 MB</p>
         </aside>
       </div>
 
@@ -120,7 +147,7 @@
         </div>
       </div>
     </div>
-    <div class="wrap footer-bottom">Â© <span data-year>2026</span> Aniyaa.</div>
+    <div class="wrap footer-bottom">© <span data-year>2026</span> Aniyaa.</div>
   </footer>
   <button class="scroll-top" type="button" data-scroll-top aria-label="Back to top">
     <span class="material-symbols-rounded">arrow_upward</span>

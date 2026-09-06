@@ -10,16 +10,47 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <main class="error-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="/">
+        <img src="images/logo.png" alt="" width="38" height="38">
+        <span>Aniyaa</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="/faq">FAQ</a>
+        <a class="btn-nav" href="/download">Download</a>
+      </nav>
+      <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
+        <span class="material-symbols-rounded icon-sun">light_mode</span>
+        <span class="material-symbols-rounded icon-moon">dark_mode</span>
+      </button>
+      <button class="icon-btn menu-btn" type="button" data-drawer-toggle aria-expanded="false" aria-label="Open menu">
+        <span class="material-symbols-rounded">menu</span>
+      </button>
+    </div>
+  </header>
+  <div class="drawer" data-drawer>
+    <div class="drawer-scrim" data-drawer-scrim></div>
+    <nav class="drawer-panel" aria-label="Mobile">
+      <a href="/">Home</a>
+      <a href="/faq">FAQ</a>
+      <a href="/download">Download</a>
+    </nav>
+  </div>
+  <main id="main" class="error-page">
     <div>
-      <img src="images/logo.png" alt="" width="72" height="72" style="margin:0 auto 1rem;border-radius:18px">
+      <img src="images/logo.png" alt="" width="84" height="84">
+      <p class="kicker">404</p>
       <h1>That page is gone</h1>
       <p class="muted">The catalog is over here, though.</p>
-      <p>
+      <p class="hero-actions" style="justify-content:center;margin-top:1.2rem">
         <a class="btn btn-primary" href="/">Back home</a>
+        <a class="btn btn-ghost" href="/download">Download</a>
       </p>
     </div>
   </main>
   <script src="js/theme.js"></script>
+  <script src="js/site.js"></script>
 </body>
 </html>

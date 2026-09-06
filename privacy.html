@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Privacy — Aniyaa</title>
   <meta name="description" content="Aniyaa keeps bookmarks, history, and settings on your device. This website does not run an account system.">
+  <meta name="theme-color" content="#6750A4">
   <link rel="canonical" href="https://aniyaa.pages.dev/privacy">
   <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <script src="js/theme-preload.js"></script>
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -20,7 +22,7 @@
       </a>
       <nav class="nav-links" aria-label="Primary">
         <a href="/faq">FAQ</a>
-        <a href="/download">Download</a>
+        <a class="btn-nav" href="/download">Download</a>
         <a class="is-current" href="/privacy">Privacy</a>
       </nav>
       <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
@@ -38,15 +40,17 @@
       <a href="/">Home</a>
       <a href="/faq">FAQ</a>
       <a href="/download">Download</a>
-      <a href="/privacy">Privacy</a>
+      <a class="is-current" href="/privacy">Privacy</a>
     </nav>
   </div>
 
   <main id="main" class="section">
-    <article class="wrap prose">
+    <header class="wrap page-hero section-head">
+      <p class="kicker"><span class="material-symbols-rounded">shield</span> Local first</p>
       <h1>Privacy</h1>
       <p>Aniyaa is a local Android client. It does not create an account and it does not sync bookmarks to an Aniyaa server, because there is not one.</p>
-
+    </header>
+    <article class="privacy-card">
       <h2>What the app stores on the phone</h2>
       <p>Search history, saved searches, bookmarks, theme, lock PIN, preferred torrent app, and catalog mirror URLs. You can export or reset that data from Settings.</p>
 
@@ -65,7 +69,31 @@
   </main>
 
   <footer class="footer">
-    <div class="wrap footer-bottom">Â© <span data-year>2026</span> Aniyaa. <a href="/">Home</a></div>
+    <div class="wrap footer-grid">
+      <div>
+        <a class="brand" href="/">
+          <img src="images/logo.png" alt="" width="36" height="36">
+          <span>Aniyaa</span>
+        </a>
+        <p>Unofficial nyaa.si client for Android.</p>
+      </div>
+      <div class="footer-cols">
+        <div>
+          <h4>Product</h4>
+          <a href="/">Home</a>
+          <a href="/download">Download</a>
+        </div>
+        <div>
+          <h4>Project</h4>
+          <a href="https://github.com/Gourab0002/Aniyaa" target="_blank" rel="noopener">App source</a>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <a href="/privacy">Privacy</a>
+        </div>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">© <span data-year>2026</span> Aniyaa.</div>
   </footer>
   <script src="js/config.js"></script>
   <script src="js/theme.js"></script>
