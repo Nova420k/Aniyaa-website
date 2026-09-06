@@ -25,9 +25,7 @@ Then open `http://127.0.0.1:4173`.
 
 ## Deploy
 
-The public site is Cloudflare Pages (`aniyaa.pages.dev`), connected to this GitHub repo. Pushes to `main` deploy production; other branches get preview URLs.
-
-The Pages build runs `node scripts/prepare-site.mjs` and publishes the `site/` output.
+The public site is Cloudflare Pages (`aniyaa.pages.dev`). A GitHub Action on `main` assembles `site/` with `node scripts/prepare-site.mjs` and deploys it.
 
 Local one-off deploy (optional):
 
@@ -35,3 +33,4 @@ Local one-off deploy (optional):
 node scripts/prepare-site.mjs
 npx wrangler pages deploy ./site --project-name=aniyaa --commit-dirty=true
 ```
+
