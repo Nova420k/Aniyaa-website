@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,800&family=Outfit:wght@400;500;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=block");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=18_up_rating,android,apk_install,arrow_forward,arrow_upward,auto_awesome,backup,bookmark,bug_report,calendar_month,close,cloud_off,code,dark_mode,download,expand_more,file_download_off,help,history,inventory_2,light_mode,link,lock,menu,new_releases,notifications,palette,public_off,search,search_off,sell,swipe,tune,verified,visibility_off&display=block");
 
 :root {
   --font-sans: "Outfit", "Segoe UI", sans-serif;
@@ -117,10 +117,22 @@ input {
 }
 
 .material-symbols-rounded {
+  font-family: "Material Symbols Rounded", sans-serif;
+  font-weight: normal;
+  font-style: normal;
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  font-feature-settings: "liga";
   font-size: 1.25rem;
   line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 1em;
+  height: 1em;
   vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
 }
 
 .skip-link {
