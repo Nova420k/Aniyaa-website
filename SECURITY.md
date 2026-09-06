@@ -1,21 +1,19 @@
 # Security Policy
 
-## Supported Versions
+This repository is the Aniyaa **website**. The Android app lives in a separate repo.
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+## Supported versions
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+| Component | Supported |
+| --------- | --------- |
+| Latest website on `main` | Yes |
+| Latest Aniyaa app release | Yes |
+| Older website deploys / older app tags | No |
 
-## Reporting a Vulnerability
+## Reporting a vulnerability
 
-Use this section to tell people how to report a vulnerability.
+Open a [private GitHub security advisory](https://github.com/Gourab0002/Aniyaa-website/security/advisories/new) on this repo, or on [Gourab0002/Aniyaa](https://github.com/Gourab0002/Aniyaa/security/advisories/new) if it is about the app.
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+Do not file a public issue for a security problem.
+
+You should hear back within a few days. If the report is accepted, a fix will be published before details are discussed in public.
