@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gourab0002.github.io/Aniyaa-website/sitemap.txt

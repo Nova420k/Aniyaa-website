@@ -1,0 +1,16 @@
+{
+  "name": "Aniyaa",
+  "short_name": "Aniyaa",
+  "description": "Search nyaa.si from your Android phone.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#FEF7FF",
+  "theme_color": "#6750A4",
+  "icons": [
+    {
+      "src": "images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
