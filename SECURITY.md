@@ -12,7 +12,7 @@ This repository is the Aniyaa **website**. The Android app lives in a separate r
 
 ## Reporting a vulnerability
 
-Open a [private GitHub security advisory](https://github.com/Gourab0002/Aniyaa-website/security/advisories/new) on this repo, or on [Nova420k/Aniyaa](https://github.com/Nova420k/Aniyaa/security/advisories/new) if it is about the app.
+Open a [private GitHub security advisory](https://github.com/Nova420k/Aniyaa-website/security/advisories/new) on this repo, or on [Nova420k/Aniyaa](https://github.com/Nova420k/Aniyaa/security/advisories/new) if it is about the app.
 
 Do not file a public issue for a security problem.
 
