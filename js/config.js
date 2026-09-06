@@ -1,4 +1,5 @@
 window.ANIYAA = {
+  siteUrl: "https://aniyaa.tide-cuticle.workers.dev",
   githubUser: "Gourab0002",
   githubRepo: "Aniyaa",
   packageId: "com.nyaa.aniyaa",
