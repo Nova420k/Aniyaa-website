@@ -6,13 +6,23 @@
   <title>Privacy — Aniyaa</title>
   <meta name="description" content="Aniyaa keeps bookmarks, history, and settings on your device. This website does not run an account system.">
   <meta name="theme-color" content="#6750A4">
+  <meta property="og:title" content="Privacy — Aniyaa">
+  <meta property="og:description" content="Local-first: no account, no sync server.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://aniyaa.pages.dev/privacy">
+  <meta property="og:image" content="https://aniyaa.pages.dev/images/logo.png">
+  <meta name="twitter:card" content="summary">
   <link rel="canonical" href="https://aniyaa.pages.dev/privacy">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <script src="js/theme-preload.js"></script>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="nav">
     <div class="wrap nav-inner">
@@ -93,10 +103,11 @@
         </div>
       </div>
     </div>
-    <div class="wrap footer-bottom">© <span data-year>2026</span> Aniyaa.</div>
+    <div class="wrap footer-bottom">© <span data-year>2026</span> Aniyaa. <span class="muted"><a href="https://github.com/Nova420k/Aniyaa-website" target="_blank" rel="noopener">Improve this page</a>.</span></div>
   </footer>
-  <script src="js/config.js"></script>
-  <script src="js/theme.js"></script>
-  <script src="js/site.js"></script>
+  <div class="toast-stack" data-toast-stack aria-live="polite"></div>
+  <script src="js/config.js" defer></script>
+  <script src="js/theme.js" defer></script>
+  <script src="js/site.js" defer></script>
 </body>
 </html>

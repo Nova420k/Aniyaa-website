@@ -6,13 +6,23 @@
   <title>What's new — Aniyaa</title>
   <meta name="description" content="Aniyaa release notes loaded from GitHub.">
   <meta name="theme-color" content="#6750A4">
+  <meta property="og:title" content="What's new — Aniyaa">
+  <meta property="og:description" content="Release notes pulled live from GitHub.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://aniyaa.pages.dev/changelog">
+  <meta property="og:image" content="https://aniyaa.pages.dev/images/logo.png">
+  <meta name="twitter:card" content="summary">
   <link rel="canonical" href="https://aniyaa.pages.dev/changelog">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <script src="js/theme-preload.js"></script>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="nav">
     <div class="wrap nav-inner">
@@ -51,6 +61,14 @@
         <p class="kicker"><span class="material-symbols-rounded">new_releases</span> Releases</p>
         <h1>What's new</h1>
         <p>Pulled live from <a href="https://github.com/Nova420k/Aniyaa/releases" target="_blank" rel="noopener">GitHub Releases</a>.</p>
+        <div class="search-wrap">
+          <span class="material-symbols-rounded leading">search</span>
+          <input type="search" placeholder="Filter releases (e.g. v2.2, fix)" data-changelog-search aria-label="Filter releases">
+          <button class="icon-btn trailing" type="button" data-changelog-clear hidden aria-label="Clear filter">
+            <span class="material-symbols-rounded">close</span>
+          </button>
+        </div>
+        <p class="search-meta"><span data-changelog-count>Loading…</span></p>
       </header>
       <div data-changelog>
         <p class="muted center">Loading releases…</p>
@@ -83,15 +101,16 @@
         </div>
       </div>
     </div>
-    <div class="wrap footer-bottom">© <span data-year>2026</span> Aniyaa.</div>
+    <div class="wrap footer-bottom">© <span data-year>2026</span> Aniyaa. <span class="muted"><a href="https://github.com/Nova420k/Aniyaa-website" target="_blank" rel="noopener">Improve this page</a>.</span></div>
   </footer>
+  <div class="toast-stack" data-toast-stack aria-live="polite"></div>
   <button class="scroll-top" type="button" data-scroll-top aria-label="Back to top">
     <span class="material-symbols-rounded">arrow_upward</span>
   </button>
-  <script src="js/config.js"></script>
-  <script src="js/theme.js"></script>
-  <script src="js/release.js"></script>
-  <script src="js/changelog.js"></script>
-  <script src="js/site.js"></script>
+  <script src="js/config.js" defer></script>
+  <script src="js/theme.js" defer></script>
+  <script src="js/release.js" defer></script>
+  <script src="js/changelog.js" defer></script>
+  <script src="js/site.js" defer></script>
 </body>
 </html>

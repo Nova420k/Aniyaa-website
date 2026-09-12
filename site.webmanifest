@@ -3,14 +3,23 @@
   "short_name": "Aniyaa",
   "description": "Search nyaa.si from your Android phone.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#FEF7FF",
   "theme_color": "#6750A4",
+  "categories": ["utilities", "entertainment"],
   "icons": [
     {
       "src": "images/logo.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
