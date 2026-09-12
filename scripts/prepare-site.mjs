@@ -17,6 +17,7 @@ const files = [
   "favicon.png",
   "robots.txt",
   "sitemap.txt",
+  "sitemap.xml",
   "site.webmanifest",
   "LICENSE",
 ];

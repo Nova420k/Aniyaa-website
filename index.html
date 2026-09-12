@@ -9,15 +9,27 @@
   <meta property="og:title" content="Aniyaa">
   <meta property="og:description" content="Search nyaa.si from your Android phone. Not a torrent client — just a faster catalog.">
   <meta property="og:image" content="https://aniyaa.pages.dev/images/logo.png">
+  <meta property="og:image:alt" content="Aniyaa app icon">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://aniyaa.pages.dev/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Aniyaa — Search nyaa.si from your Android phone">
+  <meta name="twitter:description" content="Filter results, keep bookmarks, and hand magnets to the torrent app you already use. Unofficial. Open source.">
+  <meta name="twitter:image" content="https://aniyaa.pages.dev/images/logo.png">
   <link rel="canonical" href="https://aniyaa.pages.dev/">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"SoftwareApplication","name":"Aniyaa","operatingSystem":"Android 7.0+","applicationCategory":"UtilitiesApplication","offers":{"@type":"Offer","price":"0"},"license":"https://www.gnu.org/licenses/agpl-3.0.html","downloadUrl":"https://github.com/Nova420k/Aniyaa/releases/latest","softwareHelp":"https://aniyaa.pages.dev/faq"}
+  </script>
   <script src="js/theme-preload.js"></script>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="nav">
@@ -62,6 +74,11 @@
             Android 7.0 and newer
           </p>
           <h1>Nyaa in your pocket,<br> <span class="gradient-text">without the browser.</span></h1>
+          <div class="hero-badges" aria-label="Highlights">
+            <span class="hero-badge"><span class="material-symbols-rounded">star</span><span><span data-github-stars>—</span> GitHub stars</span></span>
+            <span class="hero-badge"><span class="material-symbols-rounded">download</span><span data-release-downloads>APK from GitHub</span></span>
+            <span class="hero-badge"><span class="material-symbols-rounded">lock</span>No account · stays on device</span>
+          </div>
           <p class="lede">
             Aniyaa is a small Android app for searching <a href="https://nyaa.si" target="_blank" rel="noopener">nyaa.si</a>.
             Filter results, keep bookmarks, and send a magnet to the torrent app you already use.
@@ -76,6 +93,10 @@
               <span class="material-symbols-rounded">code</span>
               View source
             </a>
+            <button class="btn btn-ghost" type="button" data-copy="APK_URL" data-copy-apk aria-label="Copy APK download link">
+              <span class="material-symbols-rounded">link</span>
+              <span data-copy-label>Copy link</span>
+            </button>
           </div>
           <div class="meta-row">
             <span><span class="material-symbols-rounded">sell</span> Latest <strong data-release-tag>v2.2.0</strong></span>
@@ -88,7 +109,15 @@
           <div class="orb orb-a"></div>
           <div class="orb orb-b"></div>
           <div class="hero-stage">
-            <img class="mascot" src="images/logo.png" alt="Aniyaa mascot">
+            <div class="float-card float-a" aria-hidden="true">
+              <span class="material-symbols-rounded">verified</span>
+              <span>Trusted filter on<small>Skip remakes in one tap</small></span>
+            </div>
+            <div class="float-card float-b" aria-hidden="true">
+              <span class="material-symbols-rounded">send</span>
+              <span>Magnet → your app<small>LibreTorrent, Flud, qBit…</small></span>
+            </div>
+            <img class="mascot" src="images/logo.png" alt="Aniyaa mascot" loading="eager" decoding="async" fetchpriority="high">
             <div class="device" aria-hidden="true">
               <div class="device-screen">
                 <div class="device-notch"></div>
@@ -157,12 +186,12 @@
         </div>
 
         <div class="tabs" role="tablist" aria-label="Feature groups">
-          <button class="tab is-active" type="button" role="tab" aria-selected="true" data-feature-tab="browse">Browse</button>
-          <button class="tab" type="button" role="tab" aria-selected="false" data-feature-tab="save">Save</button>
-          <button class="tab" type="button" role="tab" aria-selected="false" data-feature-tab="privacy">Privacy</button>
+          <button class="tab is-active" type="button" role="tab" id="tab-browse" aria-controls="panel-browse" aria-selected="true" data-feature-tab="browse">Browse</button>
+          <button class="tab" type="button" role="tab" id="tab-save" aria-controls="panel-save" aria-selected="false" tabindex="-1" data-feature-tab="save">Save</button>
+          <button class="tab" type="button" role="tab" id="tab-privacy" aria-controls="panel-privacy" aria-selected="false" tabindex="-1" data-feature-tab="privacy">Privacy</button>
         </div>
 
-        <div class="panel is-active" data-feature-panel="browse" role="tabpanel">
+        <div class="panel is-active" id="panel-browse" data-feature-panel="browse" role="tabpanel" aria-labelledby="tab-browse">
           <div class="cards">
             <article class="card" data-reveal>
               <div class="icon-blob"><span class="material-symbols-rounded">search</span></div>
@@ -187,7 +216,7 @@
           </div>
         </div>
 
-        <div class="panel" data-feature-panel="save" role="tabpanel" hidden>
+        <div class="panel" id="panel-save" data-feature-panel="save" role="tabpanel" aria-labelledby="tab-save" hidden>
           <div class="cards">
             <article class="card">
               <div class="icon-blob"><span class="material-symbols-rounded">bookmark</span></div>
@@ -212,7 +241,7 @@
           </div>
         </div>
 
-        <div class="panel" data-feature-panel="privacy" role="tabpanel" hidden>
+        <div class="panel" id="panel-privacy" data-feature-panel="privacy" role="tabpanel" aria-labelledby="tab-privacy" hidden>
           <div class="cards">
             <article class="card">
               <div class="icon-blob"><span class="material-symbols-rounded">lock</span></div>
@@ -390,7 +419,7 @@
     <div class="wrap footer-grid">
       <div>
         <a class="brand" href="/">
-          <img src="images/logo.png" alt="" width="36" height="36">
+          <img src="images/logo.png" alt="" width="36" height="36" loading="lazy" decoding="async">
           <span>Aniyaa</span>
         </a>
         <p>Unofficial nyaa.si client for Android. Not a torrent downloader. Use it in line with the laws where you live.</p>
@@ -407,6 +436,7 @@
           <h4>Project</h4>
           <a href="https://github.com/Nova420k/Aniyaa" target="_blank" rel="noopener">App source</a>
           <a href="https://github.com/Nova420k/Aniyaa/releases" target="_blank" rel="noopener">Releases</a>
+          <a href="https://github.com/Nova420k/Aniyaa-website" target="_blank" rel="noopener">Website source</a>
           <a href="https://aniyaa.pages.dev">This website</a>
         </div>
         <div>
@@ -417,17 +447,18 @@
       </div>
     </div>
     <div class="wrap footer-bottom">
-      © <span data-year>2026</span> Aniyaa. Open source under AGPL-3.0.
+      © <span data-year>2026</span> Aniyaa. Open source under AGPL-3.0. <span class="muted">Website: MIT. <a href="https://github.com/Nova420k/Aniyaa-website" target="_blank" rel="noopener">Improve this page</a>.</span>
     </div>
   </footer>
 
+  <div class="toast-stack" data-toast-stack aria-live="polite"></div>
   <button class="scroll-top" type="button" data-scroll-top aria-label="Back to top">
     <span class="material-symbols-rounded">arrow_upward</span>
   </button>
 
-  <script src="js/config.js"></script>
-  <script src="js/theme.js"></script>
-  <script src="js/release.js"></script>
-  <script src="js/site.js"></script>
+  <script src="js/config.js" defer></script>
+  <script src="js/theme.js" defer></script>
+  <script src="js/release.js" defer></script>
+  <script src="js/site.js" defer></script>
 </body>
 </html>

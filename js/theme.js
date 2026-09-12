@@ -21,6 +21,8 @@
   function applyTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme);
     document.documentElement.style.colorScheme = theme;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", theme === "dark" ? "#120f18" : "#6750A4");
   }
 
   window.AniyaaTheme = {

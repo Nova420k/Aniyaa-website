@@ -4,12 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Page not found — Aniyaa</title>
+  <meta name="description" content="That Aniyaa page is gone — head back home, read the FAQ, or grab the APK.">
+  <meta name="theme-color" content="#6750A4">
   <link rel="canonical" href="https://aniyaa.pages.dev/">
   <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <script src="js/theme-preload.js"></script>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="nav">
     <div class="wrap nav-inner">
@@ -40,17 +46,19 @@
   </div>
   <main id="main" class="error-page">
     <div>
-      <img src="images/logo.png" alt="" width="84" height="84">
+      <img src="images/logo.png" alt="" width="84" height="84" loading="lazy" decoding="async">
       <p class="kicker">404</p>
       <h1>That page is gone</h1>
       <p class="muted">The catalog is over here, though.</p>
       <p class="hero-actions" style="justify-content:center;margin-top:1.2rem">
         <a class="btn btn-primary" href="/">Back home</a>
         <a class="btn btn-ghost" href="/download">Download</a>
+        <a class="btn btn-ghost" href="/faq">FAQ</a>
       </p>
     </div>
   </main>
-  <script src="js/theme.js"></script>
-  <script src="js/site.js"></script>
+  <div class="toast-stack" data-toast-stack aria-live="polite"></div>
+  <script src="js/theme.js" defer></script>
+  <script src="js/site.js" defer></script>
 </body>
 </html>
