@@ -891,8 +891,16 @@ main.section {
   border-bottom: 0;
 }
 
-.faq-item button {
-  width: 100%;
+.faq-item-head {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.faq-item [data-faq-button] {
+  flex: 1;
+  min-width: 0;
+  width: auto;
   background: none;
   border: 0;
   color: inherit;
@@ -906,13 +914,13 @@ main.section {
   font-size: 1.04rem;
 }
 
-.faq-item button .material-symbols-rounded:last-child {
+.faq-item [data-faq-button] .material-symbols-rounded:last-child {
   margin-left: auto;
   color: var(--text-faint);
   transition: transform var(--ease);
 }
 
-.faq-item.is-open button .material-symbols-rounded:last-child {
+.faq-item.is-open [data-faq-button] .material-symbols-rounded:last-child {
   transform: rotate(180deg);
 }
 
@@ -1927,6 +1935,7 @@ mark {
 .faq-link-btn {
   margin-left: 0.2rem;
   opacity: 0;
+  pointer-events: none;
   border: 0;
   background: transparent;
   color: var(--text-faint);
@@ -1946,6 +1955,14 @@ mark {
 .faq-item:hover .faq-link-btn,
 .faq-link-btn:focus-visible {
   opacity: 1;
+  pointer-events: auto;
+}
+
+@media (hover: none) {
+  .faq-link-btn {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 .faq-item.is-highlighted {

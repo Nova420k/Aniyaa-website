@@ -304,8 +304,17 @@
       if (!btn || !panel) return;
       if (!btn.hasAttribute("aria-controls")) btn.setAttribute("aria-controls", item.id + "-panel");
       panel.id = item.id + "-panel";
-      // Auto-add a "copy link" button so every FAQ entry is deep-linkable,
-      // even on pages whose HTML predates the feature.
+
+      let row = qs(".faq-item-head", item);
+      if (!row) {
+        row = document.createElement("div");
+        row.className = "faq-item-head";
+        btn.parentNode.insertBefore(row, btn);
+        row.appendChild(btn);
+      } else if (btn.parentElement !== row) {
+        row.insertBefore(btn, row.firstChild);
+      }
+
       let linkBtn = qs("[data-faq-link]", item);
       if (!linkBtn) {
         linkBtn = document.createElement("button");
@@ -315,10 +324,9 @@
         linkBtn.setAttribute("aria-label", "Copy link to this answer");
         linkBtn.title = "Copy link";
         linkBtn.innerHTML = '<span class="material-symbols-rounded" aria-hidden="true">link</span>';
-        const expandIcon = qs("[data-faq-button] > .material-symbols-rounded:last-child", item);
-        if (expandIcon) btn.insertBefore(linkBtn, expandIcon);
-        else btn.appendChild(linkBtn);
       }
+      if (linkBtn.parentElement !== row) row.appendChild(linkBtn);
+
       btn.addEventListener("click", () => {
         const open = !item.classList.contains("is-open");
         setPanel(item, open, true);
@@ -326,17 +334,15 @@
           try { history.replaceState(null, "", "#" + item.id); } catch { /* noop */ }
         }
       });
-      if (linkBtn) {
-        linkBtn.addEventListener("click", async (e) => {
-          e.stopPropagation();
-          const url = window.location.origin + window.location.pathname + "#" + item.id;
-          const ok = await copyText(url);
-          toast(ok ? "FAQ link copied" : "Copy failed", ok ? "link" : "close");
-          if (ok) {
-            try { history.replaceState(null, "", "#" + item.id); } catch { /* noop */ }
-          }
-        });
-      }
+      linkBtn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const url = window.location.origin + window.location.pathname + "#" + item.id;
+        const ok = await copyText(url);
+        toast(ok ? "FAQ link copied" : "Copy failed", ok ? "link" : "close");
+        if (ok) {
+          try { history.replaceState(null, "", "#" + item.id); } catch { /* noop */ }
+        }
+      });
     });
 
     // Deep-link: #faq-3 opens + highlights.
@@ -359,8 +365,22 @@
     return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
+  function faqPlainText(root) {
+    if (!root) return "";
+    const parts = [];
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        const parent = node.parentElement;
+        if (!parent) return NodeFilter.FILTER_REJECT;
+        if (parent.closest(".material-symbols-rounded, [data-faq-link]")) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    });
+    while (walker.nextNode()) parts.push(walker.currentNode.nodeValue);
+    return parts.join(" ");
+  }
+
   function highlightText(root, query) {
-    // Clear previous marks.
     qsa("mark", root).forEach((m) => {
       const parent = m.parentNode;
       if (!parent) return;
@@ -373,7 +393,10 @@
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
       acceptNode(node) {
         if (!node.nodeValue || !node.nodeValue.toLowerCase().includes(q)) return NodeFilter.FILTER_REJECT;
-        if (node.parentElement && /^(SCRIPT|STYLE|MARK)$/.test(node.parentElement.tagName)) return NodeFilter.FILTER_REJECT;
+        const parent = node.parentElement;
+        if (!parent) return NodeFilter.FILTER_REJECT;
+        if (/^(SCRIPT|STYLE|MARK)$/.test(parent.tagName)) return NodeFilter.FILTER_REJECT;
+        if (parent.closest(".material-symbols-rounded, [data-faq-link]")) return NodeFilter.FILTER_REJECT;
         return NodeFilter.FILTER_ACCEPT;
       },
     });
@@ -408,12 +431,13 @@
       if (clear) clear.hidden = !q;
       let shown = 0;
       items.forEach((item) => {
-        const text = item.textContent.toLowerCase();
+        const text = faqPlainText(item).toLowerCase();
         const match = !q || text.includes(q);
         item.hidden = !match;
         if (match) {
           shown += 1;
-          highlightText(item, q);
+          highlightText(qs("[data-faq-button]", item), q);
+          highlightText(qs("[data-faq-panel]", item), q);
           // Auto-expand matches while searching, collapse back when cleared.
           if (q) setPanel(item, true, false);
           else setPanel(item, false, false);
