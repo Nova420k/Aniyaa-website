@@ -221,39 +221,31 @@
     });
   }
 
-  /* ---------- 7. Curtain page transitions ---------- */
+  /* ---------- 7. Subtle page transitions (no blocking overlay) ---------- */
   function curtain() {
-    var veil = document.createElement("div");
-    veil.className = "page-curtain";
-    veil.setAttribute("aria-hidden", "true");
-    veil.innerHTML = "<span></span>";
-    document.body.appendChild(veil);
-
-    // Reveal on load.
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () { veil.classList.add("is-gone"); });
-    });
-    setTimeout(function () { veil.classList.add("is-idle"); }, 900);
-
-    if (reduced()) return; // no outbound animation
+    // Native cross-document transitions where supported (Chrome 126+):
+    // CSS `@view-transition { navigation: auto }` handles the crossfade.
+    // Here we only add a fast 160ms fade/rise/blur-out for browsers
+    // without it. No overlay, no spinner, no long block.
+    if (reduced()) return;
+    var leaving = false;
     document.addEventListener("click", function (e) {
-      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (leaving || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       var a = e.target.closest ? e.target.closest("a[href]") : null;
       if (!a) return;
       var href = a.getAttribute("href");
-      if (!href || href.charAt(0) === "#" || a.hasAttribute("download")) return;
-      if (a.target === "_blank" || a.rel.indexOf("noopener") >= 0 && /^https?:/i.test(href) && a.host !== location.host) {
-        // External: let it go, still flash curtain for delight.
-        return;
-      }
+      if (!href || href.charAt(0) === "#" || a.hasAttribute("download") || a.target === "_blank") return;
       var url;
       try { url = new URL(href, location.href); } catch (err) { return; }
       if (url.origin !== location.origin) return;
-      if (url.pathname === location.pathname && url.hash) return; // same-page anchor
+      if (url.pathname === location.pathname && (url.hash || url.search === location.search)) return; // same-page anchor
+      if (url.href === location.href) return;
+      // If the browser will do a native view transition, don't delay at all.
+      if (document.startViewTransition) return;
       e.preventDefault();
-      veil.classList.remove("is-gone", "is-idle");
-      veil.classList.add("is-cover");
-      setTimeout(function () { location.href = url.href; }, 380);
+      leaving = true;
+      document.body.classList.add("is-leaving");
+      setTimeout(function () { location.href = url.href; }, 170);
     });
   }
 

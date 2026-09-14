@@ -2667,37 +2667,24 @@ body.is-in [data-hero-item] {
   to { opacity: 1; transform: none; filter: none; }
 }
 
-/* Curtain page transition */
-.page-curtain {
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  pointer-events: all;
-  background:
-    radial-gradient(600px 300px at 20% 20%, rgba(255, 255, 255, 0.18), transparent 60%),
-    linear-gradient(120deg, #5b21ff 0%, #9333ea 45%, #ec4899 100%);
-  transform: translateY(0);
-  transition: transform 620ms cubic-bezier(0.76, 0, 0.24, 1);
-  display: grid;
-  place-items: center;
+/* Subtle page transitions: native crossfade where supported + fast fade-out fallback */
+@view-transition { navigation: auto; }
+main {
+  transition: opacity 170ms ease, transform 170ms ease, filter 170ms ease;
 }
-.page-curtain > span {
-  width: 54px; height: 54px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.35);
-  border-top-color: #fff;
-  animation: curtain-spin 0.9s linear infinite;
+body.is-leaving main {
+  opacity: 0;
+  transform: translateY(10px);
+  filter: blur(6px);
 }
-@keyframes curtain-spin { to { transform: rotate(360deg); } }
-.page-curtain.is-gone {
-  transform: translateY(-101%);
-  pointer-events: none;
+::view-transition-old(root) { animation: vt-out 220ms ease both; }
+::view-transition-new(root) { animation: vt-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes vt-out {
+  to { opacity: 0; transform: translateY(8px) scale(0.995); filter: blur(5px); }
 }
-.page-curtain.is-idle { display: none; }
-.page-curtain.is-cover {
-  display: grid;
-  transform: translateY(0);
-  pointer-events: all;
+@keyframes vt-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.996); filter: blur(7px); }
+  to { opacity: 1; transform: none; filter: none; }
 }
 
 @media (max-width: 760px) {
@@ -2707,7 +2694,9 @@ body.is-in [data-hero-item] {
 
 @media (prefers-reduced-motion: reduce) {
   [data-hero-item] { opacity: 1; transform: none; filter: none; transition: none; }
-  .page-curtain { display: none !important; }
+  main { transition: none; }
+  body.is-leaving main { opacity: 1; transform: none; filter: none; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
   .tilt::after { display: none; }
   .fx-panel.fx-enter { animation: none; }
 }
