@@ -2586,3 +2586,128 @@ main.section {
   max-height: 420px;
   overflow: auto;
 }
+
+/* ================= Particle physics + complex transitions ================= */
+
+/* Particle canvas lives behind hero content */
+.hero { isolation: isolate; }
+.particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.95;
+}
+[data-theme="dark"] .particles { opacity: 1; }
+.hero-grid { isolation: isolate; }
+
+/* Hero entrance choreography (JS adds body.is-in + --delay per item) */
+[data-hero-item] {
+  opacity: 0;
+  transform: translateY(28px);
+  filter: blur(10px);
+  transition: opacity 720ms ease, transform 720ms cubic-bezier(0.16, 1, 0.3, 1), filter 720ms ease;
+  transition-delay: var(--delay, 0ms);
+  will-change: opacity, transform, filter;
+}
+body.is-in [data-hero-item] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Cursor glow follower inside hero */
+.hero-cursor {
+  position: absolute;
+  left: 0; top: 0;
+  width: 190px; height: 190px;
+  margin: -95px 0 0 -95px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(closest-side, rgba(139, 92, 246, 0.32), rgba(236, 72, 153, 0.14), transparent 72%);
+  mix-blend-mode: screen;
+  opacity: 0.9;
+  will-change: transform;
+}
+[data-theme="dark"] .hero-cursor {
+  background: radial-gradient(closest-side, rgba(167, 139, 255, 0.4), rgba(240, 171, 252, 0.16), transparent 72%);
+}
+
+/* 3D tilt + glare (JS sets --mx/--my, composes via transform) */
+.tilt {
+  transform-style: preserve-3d;
+  will-change: transform;
+  position: relative;
+}
+.tilt::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.22), transparent 55%);
+}
+.tilt:hover::after { opacity: 1; }
+[data-theme="dark"] .tilt::after {
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.12), transparent 55%);
+}
+
+/* Magnetic buttons use `translate` prop so :hover `transform` still applies */
+.magnetic { will-change: translate; }
+
+/* Animated feature-tab swaps */
+.fx-panel.fx-enter { animation: fx-in 440ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes fx-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.985); filter: blur(8px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+/* Curtain page transition */
+.page-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: all;
+  background:
+    radial-gradient(600px 300px at 20% 20%, rgba(255, 255, 255, 0.18), transparent 60%),
+    linear-gradient(120deg, #5b21ff 0%, #9333ea 45%, #ec4899 100%);
+  transform: translateY(0);
+  transition: transform 620ms cubic-bezier(0.76, 0, 0.24, 1);
+  display: grid;
+  place-items: center;
+}
+.page-curtain > span {
+  width: 54px; height: 54px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  animation: curtain-spin 0.9s linear infinite;
+}
+@keyframes curtain-spin { to { transform: rotate(360deg); } }
+.page-curtain.is-gone {
+  transform: translateY(-101%);
+  pointer-events: none;
+}
+.page-curtain.is-idle { display: none; }
+.page-curtain.is-cover {
+  display: grid;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+@media (max-width: 760px) {
+  .particles { opacity: 0.7; }
+  .hero-cursor { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-hero-item] { opacity: 1; transform: none; filter: none; transition: none; }
+  .page-curtain { display: none !important; }
+  .tilt::after { display: none; }
+  .fx-panel.fx-enter { animation: none; }
+}
