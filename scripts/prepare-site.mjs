@@ -13,6 +13,7 @@ const files = [
   "download.html",
   "changelog.html",
   "privacy.html",
+  "license.html",
   "404.html",
   "favicon.png",
   "robots.txt",

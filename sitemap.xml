@@ -5,4 +5,5 @@
   <url><loc>https://aniyaa.pages.dev/faq</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://aniyaa.pages.dev/changelog</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://aniyaa.pages.dev/privacy</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://aniyaa.pages.dev/license</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
 </urlset>

@@ -2569,3 +2569,20 @@ main.section {
   .faq-item [data-faq-button] { font-size: .99rem; }
   .section { padding: 3.8rem 0; }
 }
+
+/* License page */
+.license-text {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  font-family: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  background: color-mix(in srgb, var(--primary) 7%, var(--bg-elevated));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  margin: 0.9rem 0 0;
+  color: var(--text-muted);
+  max-height: 420px;
+  overflow: auto;
+}
