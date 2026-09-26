@@ -474,40 +474,73 @@
     run();
   }
 
+  /* ---------- Shared scroll loop ----------
+     One rAF-throttled listener for every scroll-driven widget, instead of
+     one per widget. Scroll handlers fire at up to 120Hz on some phones, so
+     collapsing them into a single queued frame keeps the main thread free
+     while the page is moving. */
+  const scrollHandlers = [];
+  let scrollQueued = false;
+
+  function runScrollHandlers() {
+    scrollQueued = false;
+    for (let i = 0; i < scrollHandlers.length; i += 1) scrollHandlers[i]();
+  }
+
+  function addScrollHandler(fn, runNow) {
+    scrollHandlers.push(fn);
+    if (runNow !== false) fn();
+  }
+
+  if ("requestAnimationFrame" in window) {
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (scrollQueued) return;
+        scrollQueued = true;
+        requestAnimationFrame(runScrollHandlers);
+      },
+      { passive: true }
+    );
+    window.addEventListener("resize", () => {
+      if (scrollQueued) return;
+      scrollQueued = true;
+      requestAnimationFrame(runScrollHandlers);
+    });
+  }
+
   function initNavScroll() {
     const nav = qs(".nav");
     if (!nav) return;
-    function sync() {
+    addScrollHandler(() => {
       nav.classList.toggle("is-scrolled", window.scrollY > 8);
-    }
-    window.addEventListener("scroll", sync, { passive: true });
-    sync();
+    });
   }
 
   function initScrollProgress() {
     const bar = qs("[data-scroll-progress]");
     if (!bar) return;
-    function sync() {
+    let last = -1;
+    addScrollHandler(() => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       const p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
-      bar.style.transform = "scaleX(" + p.toFixed(4) + ")";
-    }
-    window.addEventListener("scroll", sync, { passive: true });
-    window.addEventListener("resize", sync);
-    sync();
+      // Quantised to whole percent: skip redundant style writes.
+      const q = Math.round(p * 100);
+      if (q === last) return;
+      last = q;
+      bar.style.transform = "scaleX(" + (q / 100).toFixed(2) + ")";
+    });
   }
 
   function initScrollTop() {
     const btn = qs("[data-scroll-top]");
     if (!btn) return;
-    function sync() {
+    addScrollHandler(() => {
       btn.classList.toggle("is-visible", window.scrollY > 480);
-    }
-    window.addEventListener("scroll", sync, { passive: true });
+    });
     btn.addEventListener("click", () =>
       window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? "auto" : "smooth" })
     );
-    sync();
   }
 
   function initSectionSpy() {
@@ -541,17 +574,19 @@
     if (!hint) return;
     const ua = navigator.userAgent || "";
     const isAndroid = /Android/i.test(ua);
-    const isMobile = /Android|iPhone|iPad|Mobile/i.test(ua);
+    // A coarse pointer is the reliable signal here — it is true on every
+    // phone and tablet, and unlike the UA string it also survives emulators
+    // and desktop browsers with a touchscreen.
+    const isTouch = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
     const label = qs("[data-platform-label]", hint);
     if (isAndroid) {
       if (label) label.textContent = "You're on Android — tap Download APK, then open the file to install.";
-    } else if (isMobile) {
-      if (label) label.textContent = "You're on a phone — open this page on your Android device or scan the QR code.";
+    } else if (isTouch) {
+      if (label) label.textContent = "Open this page on your Android phone to install, or scan the QR code from a desktop browser.";
     } else {
       if (label) label.textContent = "You're on desktop — scan the QR code with your Android phone to grab the APK.";
     }
     hint.classList.add("is-visible");
-    void isMobile;
   }
 
   function initYear() {

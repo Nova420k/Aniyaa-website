@@ -45,6 +45,34 @@
     var t0 = performance.now();
     var theme = currentTheme();
 
+    /* --- device profile: one place decides how expensive we are allowed
+       to be. Touch devices and low-power/older hardware get a smaller
+       field, a lower pixel ratio, a halved frame rate and skip the
+       O(n^2) repulsion pass entirely. --- */
+    var coarse = false;   // touch-first device
+    var small = false;    // short or narrow viewport
+    var lowPower = false; // Save-Data, 2G, tiny RAM, or few cores
+    var touch = false;    // "run the cheap profile" flag
+    var frameBudget = 0;  // ms between drawn frames (0 = every frame)
+
+    function detectProfile() {
+      var mm = window.matchMedia;
+      coarse = !!(mm && mm("(pointer: coarse)").matches);
+      small = Math.min(window.innerWidth || 9999, window.innerHeight || 9999) < 700;
+      var conn = navigator.connection;
+      lowPower = !!(
+        (conn && (conn.saveData === true || /(^|-)2g$/.test(conn.effectiveType || ""))) ||
+        (navigator.deviceMemory && navigator.deviceMemory <= 2) ||
+        (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2)
+      );
+      touch = coarse || small || lowPower ||
+        (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+        (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+      // ~30fps on touch, full rate on pointer devices.
+      frameBudget = touch ? 33 : 0;
+    }
+    detectProfile();
+
     function palette() {
       // [hue, sat, light] buckets, theme-aware
       if (theme === "dark") {
@@ -60,20 +88,18 @@
     }
 
     function targetCount() {
+      if (lowPower) return 16; // static-only field, never animated
       var area = Math.max(1, W * H);
-      var n = Math.round(area / 15000);
-      var coarse = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
-      var small = Math.min(window.innerWidth || 9999, window.innerHeight || 9999) < 700;
-      if (coarse || small) n = Math.min(n, 42);
-      n = Math.max(28, Math.min(n, 115));
-      // Low-memory guard
-      if (navigator.deviceMemory && navigator.deviceMemory <= 3) n = Math.min(n, 55);
+      var n = Math.round(area / (touch ? 26000 : 15000));
+      n = Math.max(touch ? 22 : 28, Math.min(n, touch ? 46 : 115));
+      if (navigator.deviceMemory && navigator.deviceMemory <= 2) n = Math.min(n, 24);
       return n;
     }
 
     function resize() {
       var rect = hero.getBoundingClientRect();
-      DPR = Math.min(window.devicePixelRatio || 1, 1.75);
+      // A lower backing-store ratio is the single biggest GPU win here.
+      DPR = Math.min(window.devicePixelRatio || 1, touch ? 1.25 : 1.75);
       W = Math.max(1, Math.round(rect.width));
       H = Math.max(1, Math.round(rect.height));
       canvas.width = Math.round(W * DPR);
@@ -82,6 +108,7 @@
       canvas.style.height = H + "px";
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
       seed(targetCount());
+      cacheRect();
     }
 
     function seed(n) {
@@ -110,10 +137,10 @@
     }
 
     function burst(x, y, power) {
-      var n = 10 + ((Math.random() * 8) | 0);
+      var n = touch ? 5 + ((Math.random() * 4) | 0) : 10 + ((Math.random() * 8) | 0);
       var pal = palette();
       for (var i = 0; i < n; i++) {
-        if (parts.length > 150) break;
+        if (parts.length > (touch ? 70 : 150)) break;
         var a = Math.random() * Math.PI * 2;
         var sp = (1.2 + Math.random() * 3.2) * (power || 1);
         var bucket = pal[(Math.random() * pal.length) | 0];
@@ -133,13 +160,22 @@
 
     function step(now) {
       if (!running) return;
+      // Frame budget: on touch we draw every other frame instead of
+      // burning a full 60-120fps physics pass.
+      if (frameBudget && now - (step._draw || 0) < frameBudget) {
+        raf = requestAnimationFrame(step);
+        return;
+      }
+      step._draw = now;
       var dt = Math.min(50, now - (step._last || now)) || 16.6;
       step._last = now;
       var k = dt / 16.6; // frame-normalized
       var t = (now - t0) * 0.001;
-      var LINK = 132, LINK2 = LINK * LINK;
+      var LINK = touch ? 96 : 132, LINK2 = LINK * LINK;
       var MR = 190; // mouse well radius
 
+      // One layout read per drawn frame instead of one per pointer event.
+      cacheRect();
       ctx.clearRect(0, 0, W, H);
 
       // --- physics ---
@@ -153,8 +189,9 @@
         ax += (cx - p.x) * 0.000012;
         ay += (cy - p.y) * 0.000012;
 
-        // mouse gravity well: gentle attract, strong repel while pressed
-        if (mouse.inHero) {
+        // mouse gravity well: gentle attract, strong repel while pressed.
+        // Touch devices have no hover, so this is skipped entirely.
+        if (mouse.inHero && !coarse) {
           var mdx = mouse.x - p.x, mdy = mouse.y - p.y;
           var md2 = mdx * mdx + mdy * mdy;
           if (md2 < MR * MR && md2 > 4) {
@@ -184,20 +221,23 @@
         else if (p.y > H + 12) { p.y = H + 12; p.vy = -Math.abs(p.vy) * 0.9; }
       }
 
-      // short-range pairwise repulsion (keeps field organic, capped pairs)
-      for (var a = 0; a < parts.length; a++) {
-        var pa = parts[a];
-        for (var b = a + 1; b < parts.length; b++) {
-          var pb = parts[b];
-          var dx = pb.x - pa.x, dy = pb.y - pa.y;
-          if (dx > 46 || dx < -46 || dy > 46 || dy < -46) continue;
-          var d2 = dx * dx + dy * dy;
-          if (d2 > 0.01 && d2 < 2025) { // <45px
-            var d = Math.sqrt(d2);
-            var push = ((45 - d) / 45) * 0.02;
-            var nx = dx / d, ny = dy / d;
-            pa.vx -= nx * push; pa.vy -= ny * push;
-            pb.vx += nx * push; pb.vy += ny * push;
+      // Short-range pairwise repulsion keeps the field organic. It is the
+      // most expensive loop here (O(n^2)), so touch devices skip it.
+      if (!touch) {
+        for (var a = 0; a < parts.length; a++) {
+          var pa = parts[a];
+          for (var b = a + 1; b < parts.length; b++) {
+            var pb = parts[b];
+            var dx = pb.x - pa.x, dy = pb.y - pa.y;
+            if (dx > 46 || dx < -46 || dy > 46 || dy < -46) continue;
+            var d2 = dx * dx + dy * dy;
+            if (d2 > 0.01 && d2 < 2025) { // <45px
+              var d = Math.sqrt(d2);
+              var push = ((45 - d) / 45) * 0.02;
+              var nx = dx / d, ny = dy / d;
+              pa.vx -= nx * push; pa.vy -= ny * push;
+              pb.vx += nx * push; pb.vy += ny * push;
+            }
           }
         }
       }
@@ -262,8 +302,8 @@
     }
 
     function start() {
-      if (running || !visible || document.hidden) return;
-      running = true; step._last = 0;
+      if (running || !visible || document.hidden || lowPower) return;
+      running = true; step._last = 0; step._draw = 0;
       raf = requestAnimationFrame(step);
     }
     function stop() {
@@ -286,11 +326,18 @@
     }
 
     // --- events ---
-    function toLocal(e) {
+    // Cache the canvas box so pointermove never forces a layout read.
+    var boxLeft = 0, boxTop = 0;
+    function cacheRect() {
       var r = canvas.getBoundingClientRect();
-      return { x: e.clientX - r.left, y: e.clientY - r.top };
+      boxLeft = r.left;
+      boxTop = r.top;
+    }
+    function toLocal(e) {
+      return { x: e.clientX - boxLeft, y: e.clientY - boxTop };
     }
     hero.addEventListener("pointermove", function (e) {
+      if (e.pointerType === "touch") return; // no hover wells on touch
       var l = toLocal(e);
       mouse.x = l.x; mouse.y = l.y; mouse.inHero = true;
     }, { passive: true });
@@ -299,6 +346,9 @@
       mouse.x = -9999; mouse.y = -9999;
     }, { passive: true });
     hero.addEventListener("pointerdown", function (e) {
+      // Touch taps would fire this on every scroll-start; skip it.
+      if (e.pointerType === "touch" || coarse) return;
+      cacheRect();
       var l = toLocal(e);
       mouse.down = true;
       burst(l.x, l.y, 1);
@@ -307,30 +357,47 @@
 
     document.addEventListener("visibilitychange", function () {
       if (document.hidden) stop();
-      else if (!prefersReducedMotion()) start();
+      else if (!prefersReducedMotion() && !lowPower) start();
     });
 
     document.addEventListener("aniyaa:theme", function (e) {
       theme = e.detail === "dark" ? "dark" : "light";
       seed(parts.length); // recolor in place
+      if (lowPower || !running) renderStatic();
     });
 
-    if ("ResizeObserver" in window) {
-      new ResizeObserver(function () { resize(); if (prefersReducedMotion()) renderStatic(); }).observe(hero);
-    } else {
-      window.addEventListener("resize", resize);
+    // Re-profile when the device or viewport class changes (rotation, resize).
+    function reevaluate() {
+      var before = touch;
+      detectProfile();
+      if (touch !== before) {
+        seed(targetCount());
+        if (lowPower) { stop(); renderStatic(); }
+        else if (visible && !prefersReducedMotion()) start();
+      } else if (parts.length !== targetCount()) {
+        seed(targetCount());
+      }
     }
+
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(function () { reevaluate(); resize(); }).observe(hero);
+    } else {
+      window.addEventListener("resize", function () { reevaluate(); resize(); });
+    }
+    window.addEventListener("orientationchange", function () {
+      setTimeout(function () { reevaluate(); resize(); }, 250);
+    });
 
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(function (entries) {
         visible = entries[0].isIntersecting;
-        if (visible) { if (!prefersReducedMotion()) start(); }
+        if (visible) { if (!prefersReducedMotion() && !lowPower) start(); }
         else stop();
       }, { threshold: 0.02 }).observe(hero);
     }
 
     resize();
-    if (prefersReducedMotion()) renderStatic();
+    if (prefersReducedMotion() || lowPower) renderStatic();
     else start();
 
     return { burst: burst, resize: resize };
