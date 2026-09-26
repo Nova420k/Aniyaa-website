@@ -1438,8 +1438,11 @@ code {
   }
 }
 
-@media (max-width: 980px) {
-  .hero-grid,
+/* Tablet: stack the two-column layouts so nothing gets squeezed.
+   NOTE: .hero-grid is intentionally absent — its base `grid-template-columns`
+   is declared further down this file, so it has to be overridden from the
+   mobile/tablet layer at the end instead. */
+@media (max-width: 1024px) {
   .download-layout,
   .footer-grid,
   .cta-inner,
@@ -1482,11 +1485,9 @@ code {
   }
 }
 
-@media (max-width: 760px) {
-  .wrap {
-    width: min(1120px, calc(100% - 2.4rem));
-  }
-
+/* Nav collapses to the drawer earlier than the layout does, so tablets in
+   portrait (768-1024px) never get a cramped inline link row. */
+@media (max-width: 920px) {
   .nav-links {
     display: none;
   }
@@ -1554,6 +1555,12 @@ code {
   .drawer-panel a:hover,
   .drawer-panel a.is-current {
     background: var(--bg-muted);
+  }
+}
+
+@media (max-width: 760px) {
+  .wrap {
+    width: min(1120px, calc(100% - 2.4rem));
   }
 
   .cards,
@@ -2548,7 +2555,7 @@ main.section {
 .toast { border-radius: 16px; box-shadow: var(--shadow-lg); }
 
 /* Responsive polish */
-@media (max-width: 980px) {
+@media (max-width: 1024px) {
   .nav { padding: .6rem 0; }
   .nav-inner { border-radius: 18px; }
   .hero-grid { padding: 2.8rem 0 4rem; gap: 2.2rem; }
@@ -2699,4 +2706,645 @@ body.is-leaving main {
   ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
   .tilt::after { display: none; }
   .fx-panel.fx-enter { animation: none; }
+}
+
+/* ================= Mobile & tablet optimization =================
+   Layered after every base rule so these win on source order.
+     1. Safe-area insets (notches, home indicator, landscape cutouts)
+     2. Touch ergonomics (44px targets, no sticky hover, tap feedback)
+     3. Tablet tier  (<= 1024px)
+     4. Phone tier   (<= 700px)
+     5. Small phone  (<= 380px)
+     6. Landscape phones (short viewports)
+   ------------------------------------------------------------------ */
+
+/* ---- 1. Safe areas + text inflation ---- */
+:root {
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+  --tap: 44px;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  overflow-wrap: break-word;
+}
+
+/* Gutters become real padding so the safe-area insets can be added without
+   breaking the centred max-width maths. 1200px = 1160px content + 2.5rem. */
+.wrap {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: calc(1.25rem + var(--safe-l)) calc(1.25rem + var(--safe-r));
+}
+
+.nav {
+  padding-top: calc(.85rem + var(--safe-t));
+  padding-left: var(--safe-l);
+  padding-right: var(--safe-r);
+}
+
+.skip-link:focus {
+  top: calc(1rem + var(--safe-t));
+}
+
+.scroll-top {
+  right: calc(1.1rem + var(--safe-r));
+  bottom: calc(1.1rem + var(--safe-b));
+  width: var(--tap);
+  height: var(--tap);
+}
+
+.toast-stack {
+  bottom: calc(1.2rem + var(--safe-b));
+  padding-inline: var(--safe-l) var(--safe-r);
+}
+
+.drawer-panel {
+  padding-top: calc(5rem + var(--safe-t));
+  padding-right: calc(1.2rem + var(--safe-r));
+  padding-bottom: calc(1.2rem + var(--safe-b));
+  overscroll-behavior: contain;
+}
+
+.footer {
+  padding-bottom: calc(1.4rem + var(--safe-b));
+  padding-left: var(--safe-r);
+  padding-right: var(--safe-r);
+}
+
+/* Long release tags / URLs must never force a horizontal scrollbar. */
+.release-card-head > *,
+.community > *,
+.stats-row > *,
+.footer-cols > *,
+.cards > *,
+.steps > *,
+.pillars > *,
+.install-grid li > * {
+  min-width: 0;
+}
+
+.release-title,
+.asset-pill,
+.footer a,
+.privacy-card p,
+.license-text,
+.release-body {
+  overflow-wrap: anywhere;
+}
+
+/* ---- 2. Touch ergonomics ---- */
+@media (hover: none) {
+  /* Kill the 300ms double-tap-zoom delay and text-selection callouts. */
+  a,
+  button,
+  input,
+  [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Hover-only affordances must not stick after a tap. */
+  .btn:hover,
+  .btn-primary:hover,
+  .btn-ghost:hover,
+  .card:hover,
+  .step:hover,
+  .community a.card:hover,
+  .faq-item:hover {
+    transform: none;
+  }
+
+  .btn-primary:hover::after {
+    transform: translateX(-110%);
+  }
+
+  .btn-primary:hover,
+  .btn-ghost:hover {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .card:hover::before {
+    opacity: 0;
+  }
+
+  /* Replace hover with a real press state. */
+  .btn:active,
+  .card:active,
+  .step:active,
+  .community a.card:active {
+    transform: scale(.985);
+  }
+
+  .btn-primary:active {
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* 44px minimum touch targets (WCAG 2.5.5 / Apple HIG). */
+  .icon-btn,
+  .icon-btn-sm {
+    width: var(--tap);
+    height: var(--tap);
+  }
+
+  .brand {
+    min-height: var(--tap);
+  }
+
+  /* The inline nav is still used on touch tablets >=921px. */
+  .nav-links a,
+  .nav-links a.btn-nav {
+    min-height: var(--tap);
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .tab,
+  .copy-btn,
+  .asset-pill,
+  .search-wrap .trailing {
+    min-height: var(--tap);
+  }
+
+  .faq-link-btn {
+    min-width: var(--tap);
+    min-height: var(--tap);
+    padding: 0;
+    place-items: center;
+  }
+
+  .drawer-panel a {
+    min-height: var(--tap);
+  }
+
+  .footer a {
+    display: flex;
+    align-items: center;
+    min-height: var(--tap);
+    margin: 0;
+  }
+
+  /* 16px minimum stops iOS Safari zooming the viewport on focus. */
+  input,
+  select,
+  textarea,
+  .search-wrap input {
+    font-size: max(1rem, 16px);
+  }
+}
+
+/* ---- 3. Tablet tier (grid/hero rules live in the 1024px blocks above) ---- */
+@media (max-width: 1024px) {
+  /* Must live here, not in the earlier 1024px block: the base two-column
+     .hero-grid rule is declared below it, and source order wins. */
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* The step connector is a horizontal line — meaningless once stacked. */
+  .steps::before {
+    display: none;
+  }
+
+  /* Cheaper blur on mid-size GPUs. */
+  .nav-inner,
+  .stats-row,
+  .float-card,
+  .search-wrap input {
+    backdrop-filter: blur(12px) saturate(1.25);
+  }
+}
+
+/* ---- 4. Phone tier ---- */
+@media (max-width: 700px) {
+  .wrap {
+    padding-inline: calc(1.1rem + var(--safe-l)) calc(1.1rem + var(--safe-r));
+  }
+
+  .nav {
+    padding-top: calc(.55rem + var(--safe-t));
+  }
+
+  .nav-inner {
+    border-radius: 17px;
+  }
+
+  .section {
+    padding: 3.4rem 0;
+  }
+
+  .cta-band {
+    padding-bottom: 3.4rem;
+  }
+
+  h1,
+  .h1 {
+    font-size: clamp(2.05rem, 8.6vw, 2.7rem);
+    line-height: 1.04;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(1.9rem, 7.6vw, 2.4rem);
+  }
+
+  .section-head {
+    margin-bottom: 2rem;
+  }
+
+  .section-head p,
+  .lede {
+    font-size: 1.04rem;
+  }
+
+  .lede {
+    max-width: 100%;
+  }
+
+  /* Base rules below re-declare .hero-art/.hero-stage min-height and
+     .device animation, so the phone values have to be re-asserted here. */
+  .hero-art,
+  .hero-stage {
+    min-height: 0;
+    width: 100%;
+  }
+
+  .hero-grid {
+    padding: 1.6rem 0 2.6rem;
+    gap: 1.6rem;
+  }
+
+  .device {
+    width: min(244px, 66vw);
+    padding: 9px;
+    border-radius: 38px;
+    animation: none;
+  }
+
+  .device-screen {
+    min-height: 408px;
+    border-radius: 28px;
+  }
+
+  .device-notch {
+    width: 86px;
+    height: 18px;
+  }
+
+  .device-status {
+    font-size: .62rem;
+  }
+
+  .device-search {
+    padding: .5rem .7rem;
+    font-size: .7rem;
+  }
+
+  .chip {
+    font-size: .6rem;
+    padding: .18rem .44rem;
+  }
+
+  .listing {
+    padding: .5rem .6rem;
+    border-radius: 13px;
+  }
+
+  .listing strong {
+    font-size: .7rem;
+  }
+
+  .listing small {
+    font-size: .6rem;
+  }
+
+  .device-bar {
+    font-size: .52rem;
+    padding: .34rem .2rem .58rem;
+  }
+
+  .device-bar .material-symbols-rounded {
+    font-size: .95rem;
+  }
+
+  .mascot {
+    display: none;
+  }
+
+  .float-card {
+    display: none;
+  }
+
+  /* Four tall stacked stats eat a whole phone screen. A 2x2 board with a
+     cross divider keeps the same information in half the height. */
+  .stats {
+    margin-top: -1.6rem;
+  }
+
+  .stats-row,
+  .cards,
+  .steps,
+  .community,
+  .pillars,
+  .footer-cols {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .stat {
+    padding: .8rem .5rem;
+  }
+
+  .stat + .stat {
+    border-left: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .stat:nth-child(even) {
+    border-left: 1px solid var(--border);
+  }
+
+  .stat:nth-child(n + 3) {
+    border-top: 1px solid var(--border);
+  }
+
+  /* Primary CTA gets the full row; secondary actions split it so three
+     stacked full-width buttons do not push the app screenshot off-screen. */
+  .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .6rem;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    padding-inline: .8rem;
+  }
+
+  .hero-actions .btn-primary {
+    grid-column: 1 / -1;
+  }
+
+  .card,
+  .step,
+  .faq-item {
+    padding: 1.25rem 1.1rem;
+  }
+
+  .icon-blob {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+  }
+
+  .faq-item [data-faq-button] {
+    font-size: 1rem;
+    padding: 1rem .9rem;
+    gap: .65rem;
+  }
+
+  .faq-panel > div {
+    padding-left: .1rem;
+  }
+
+  .faq-shell {
+    padding: 0;
+  }
+
+  .tabs {
+    width: 100%;
+    border-radius: 20px;
+    padding: 5px;
+  }
+
+  .tab {
+    flex: 1 1 0;
+    padding: .6rem .5rem;
+    font-size: .95rem;
+  }
+
+  .cta-inner {
+    padding: 1.9rem 1.3rem;
+    border-radius: 22px;
+  }
+
+  .release-card,
+  .privacy-card,
+  .qr-card {
+    padding: 1.15rem 1.05rem;
+  }
+
+  .install-grid li {
+    gap: .7rem;
+  }
+
+  /* Glass over moving particles hurts contrast on small screens — go solid. */
+  .nav-inner,
+  .kicker,
+  .hero-badge,
+  .btn-ghost,
+  .float-card,
+  .card,
+  .faq-item,
+  .step,
+  .release-card,
+  .qr-card,
+  .privacy-card,
+  .tabs {
+    backdrop-filter: none;
+  }
+
+  .kicker,
+  .hero-badge,
+  .btn-ghost {
+    background: var(--bg-elevated);
+    border-color: var(--border-strong);
+  }
+
+  /* The grid mask is a full-bleed blurred layer; not worth it here. */
+  .hero::before {
+    display: none;
+  }
+
+  .particles {
+    opacity: .5;
+  }
+
+  .gradient-text {
+    animation: none;
+  }
+
+  .search-meta {
+    margin-top: .6rem;
+  }
+
+  .toast {
+    font-size: .88rem;
+    padding: .55rem .9rem;
+  }
+
+  .license-text {
+    max-height: 60vh;
+    font-size: .78rem;
+  }
+}
+
+/* ---- 5. Small phones ---- */
+@media (max-width: 380px) {
+  h1,
+  .h1 {
+    font-size: 1.95rem;
+  }
+
+  .brand span {
+    font-size: 1.24rem;
+  }
+
+  .brand img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .nav-inner {
+    height: 3.4rem;
+    border-radius: 16px;
+    padding: 0 .45rem 0 .7rem;
+  }
+
+  .hero-badge,
+  .kicker {
+    font-size: .78rem;
+    padding: .34rem .65rem;
+  }
+
+  .device {
+    width: min(216px, 64vw);
+  }
+
+  .device-screen {
+    min-height: 368px;
+  }
+
+  .meta-row {
+    font-size: .84rem;
+  }
+}
+
+/* ---- 6. Landscape phones: vertical space is the constraint ---- */
+@media (orientation: landscape) and (max-height: 560px) {
+  .nav {
+    padding-top: calc(.45rem + var(--safe-t));
+  }
+
+  .nav-inner {
+    height: 3rem;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1.1fr .9fr;
+    align-items: center;
+    gap: 1.4rem;
+    padding: 1.2rem 0 1.6rem;
+  }
+
+  h1,
+  .h1 {
+    font-size: clamp(1.7rem, 5vw, 2.4rem);
+  }
+
+  .hero-art,
+  .hero-stage {
+    min-height: 0;
+  }
+
+  .device {
+    width: 176px;
+    padding: 7px;
+    border-radius: 28px;
+    animation: none;
+  }
+
+  .device-screen {
+    min-height: 246px;
+    border-radius: 22px;
+  }
+
+  .device-notch {
+    width: 58px;
+    height: 13px;
+    margin-top: 5px;
+  }
+
+  .device-status {
+    font-size: .54rem;
+    padding: .1rem .6rem;
+  }
+
+  .device-search {
+    margin: .28rem .5rem .35rem;
+    padding: .4rem .55rem;
+    font-size: .6rem;
+  }
+
+  .chips {
+    padding: 0 .5rem .3rem;
+  }
+
+  .chip {
+    font-size: .52rem;
+    padding: .12rem .36rem;
+  }
+
+  .listing {
+    margin: 0 .5rem .3rem;
+    padding: .38rem .5rem;
+    border-radius: 11px;
+  }
+
+  .listing strong {
+    font-size: .58rem;
+  }
+
+  .listing small {
+    font-size: .5rem;
+  }
+
+  .device-bar {
+    font-size: .46rem;
+    padding: .26rem .15rem .44rem;
+  }
+
+  .device-bar .material-symbols-rounded {
+    font-size: .8rem;
+  }
+
+  .mascot {
+    width: 72px;
+    height: 72px;
+    right: 0;
+    top: 0;
+    border-radius: 20px;
+  }
+
+  .float-card {
+    display: none;
+  }
+
+  .stats {
+    margin-top: -1rem;
+  }
+
+  .section {
+    padding: 2.6rem 0;
+  }
 }

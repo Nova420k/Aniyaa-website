@@ -26,13 +26,15 @@
   function entrance() {
     // Stagger hero copy children + art so first paint feels directed.
     var hero = qs(".hero");
+    var items = [];
     if (hero) {
-      var items = qsa(".hero-grid > div:first-child > *", hero);
-      items.forEach(function (el, i) {
+      var copy = qsa(".hero-grid > div:first-child > *", hero);
+      copy.forEach(function (el, i) {
         if (!el.style.getPropertyValue("--delay")) {
           el.style.setProperty("--delay", Math.min(480, i * 75) + "ms");
         }
         el.setAttribute("data-hero-item", "");
+        items.push(el);
       });
       var art = qsa(".hero-art, .hero-art *", hero);
       art.forEach(function (el) { el.setAttribute("data-hero-art", ""); });
@@ -42,6 +44,13 @@
         document.body.classList.add("is-in");
       });
     });
+    // Release the compositor layers once the intro is done — on phones
+    // those six promoted layers cost real memory for the rest of the visit.
+    setTimeout(function () {
+      items.concat(hero ? qsa("[data-hero-art]", hero) : []).forEach(function (el) {
+        el.style.willChange = "auto";
+      });
+    }, 1700);
   }
 
   /* ---------- 2. 3D tilt + glare ---------- */
@@ -134,6 +143,10 @@
   function parallax() {
     var hero = qs(".hero");
     if (!hero || reduced()) return;
+    // Pointer tracking is a hover effect, so it is skipped on touch. The
+    // scroll-driven offset still runs there: it is composited transform
+    // work on six elements and the loop idles as soon as scrolling stops.
+    var pointerOK = !coarsePointer();
     var layers = [
       { el: qs(".orb-a", hero), f: 0.10 },
       { el: qs(".orb-b", hero), f: -0.08 },
@@ -142,32 +155,66 @@
       { el: qs(".mascot", hero), f: 0.12 },
       { el: qs(".device", hero), f: 0.04 }
     ].filter(function (l) { return l.el; });
+    if (!layers.length) return;
 
     var mx = 0, my = 0, tmx = 0, tmy = 0;
-    hero.addEventListener("pointermove", function (e) {
-      var r = hero.getBoundingClientRect();
-      tmx = ((e.clientX - r.left) / Math.max(1, r.width) - 0.5);
-      tmy = ((e.clientY - r.top) / Math.max(1, r.height) - 0.5);
-    }, { passive: true });
-    hero.addEventListener("pointerleave", function () { tmx = 0; tmy = 0; }, { passive: true });
+    var sy = 0, heroTop = 0;
+    var raf = 0, live = false, pending = false;
 
-    var sy = 0;
-    function onScroll() { sy = window.scrollY || 0; }
-    window.addEventListener("scroll", rafThrottle(onScroll), { passive: true });
-    onScroll();
+    function measure() { heroTop = hero.offsetTop || 0; }
+    function schedule() { if (!raf) raf = requestAnimationFrame(frame); }
+    function kick() { pending = true; schedule(); }
 
-    (function loop() {
+    // Only re-schedules while something is still settling, so the loop
+    // idles at 0% CPU instead of spinning for the life of the page.
+    function frame() {
+      raf = 0;
+      if (!live || document.hidden) return;
       mx += (tmx - mx) * 0.06;
       my += (tmy - my) * 0.06;
-      var heroTop = hero.offsetTop || 0;
       var rel = Math.max(-400, Math.min(800, sy - heroTop));
-      layers.forEach(function (l) {
+      for (var i = 0; i < layers.length; i++) {
+        var l = layers[i];
         var px = (mx * 26 * (l.f * 10)).toFixed(1);
         var py = ((my * 22 * (l.f * 10)) + rel * l.f * 0.35).toFixed(1);
         l.el.style.translate = px + "px " + py + "px";
-      });
-      requestAnimationFrame(loop);
-    })();
+      }
+      if (pending || Math.abs(tmx - mx) > 0.002 || Math.abs(tmy - my) > 0.002) {
+        pending = false;
+        schedule();
+      }
+    }
+
+    if (pointerOK) {
+      hero.addEventListener("pointermove", function (e) {
+        var r = hero.getBoundingClientRect();
+        tmx = (e.clientX - r.left) / Math.max(1, r.width) - 0.5;
+        tmy = (e.clientY - r.top) / Math.max(1, r.height) - 0.5;
+        kick();
+      }, { passive: true });
+      hero.addEventListener("pointerleave", function () { tmx = 0; tmy = 0; kick(); }, { passive: true });
+    }
+
+    function onScroll() { sy = window.scrollY || 0; kick(); }
+    window.addEventListener("scroll", rafThrottle(onScroll), { passive: true });
+    window.addEventListener("resize", function () { measure(); kick(); }, { passive: true });
+    onScroll();
+    measure();
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        live = entries[0].isIntersecting;
+        if (live) kick();
+      }, { threshold: 0 }).observe(hero);
+    } else {
+      live = true;
+      kick();
+    }
+
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) { live = false; }
+      else if (live) kick();
+    });
   }
 
   /* ---------- 5. Cursor glow ---------- */
@@ -225,9 +272,13 @@
   function curtain() {
     // Native cross-document transitions where supported (Chrome 126+):
     // CSS `@view-transition { navigation: auto }` handles the crossfade.
-    // Here we only add a fast 160ms fade/rise/blur-out for browsers
-    // without it. No overlay, no spinner, no long block.
+    // Here we only add a fast fade/rise/blur-out for browsers without it.
+    // No overlay, no spinner, no long block.
     if (reduced()) return;
+    // On a metered or data-saver connection a deliberate delay before
+    // navigating is the wrong trade — go straight to the destination.
+    var conn = navigator.connection;
+    if (conn && (conn.saveData === true || /(^|-)2g$/.test(conn.effectiveType || ""))) return;
     var leaving = false;
     document.addEventListener("click", function (e) {
       if (leaving || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -245,7 +296,7 @@
       e.preventDefault();
       leaving = true;
       document.body.classList.add("is-leaving");
-      setTimeout(function () { location.href = url.href; }, 170);
+      setTimeout(function () { location.href = url.href; }, 120);
     });
   }
 
